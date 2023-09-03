@@ -12,4 +12,7 @@
   <string name="random_dog_generator">Random Dog Generator!</string>
   <string name="clear_dogs">Clear Dogs!</string>
   <string name="generate">Generate!</string>
+  <string name="are_you_sure_you_want_delete_all_dogs">Are you sure you want delete all dogs!</string>
+  <string name="yes">Yes</string>
+  <string name="no">No</string>
 </resources>

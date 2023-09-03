@@ -9,6 +9,7 @@ import com.example.svg.application.MyApplication
 import com.example.svg.databinding.FragmentRecentlyGeneratedDogsBinding
 import com.example.svg.ui.adapters.DogsAdapter
 import com.example.svg.util.ResourceV2
+import com.example.svg.util.showCustomDialogBox
 import com.example.svg.viewmodels.DogsViewModel
 import com.example.svg.viewmodels.DogsViewModelProviderFactory
 
@@ -28,7 +29,7 @@ class RecentlyGeneratedDogsFragment :
     setupLoadingAnim(binding.animationView)
 
     binding.btnClear.setOnClickListener{
-      viewModel.deleteAllDogs()
+      showCustomDialogBox(requireContext(), R.string.are_you_sure_you_want_delete_all_dogs, {viewModel.deleteAllDogs()})
     }
 
     binding.rvCachedDogs.layoutManager =
