@@ -3,7 +3,6 @@ package com.example.svg.ui.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import com.airbnb.lottie.LottieDrawable
 import com.bumptech.glide.Glide
 import com.example.svg.R
 import com.example.svg.application.MyApplication
@@ -26,7 +25,9 @@ class GenerateDogsFragment : BaseFragment<FragmentGenerateDogsBinding, DogsViewM
     binding.btnGenerate.setOnClickListener{
       viewModel.getRandomDog()
     }
-    setupAnim()
+
+    setupLoadingAnim(binding.animationView)
+
     viewModel.latestRandomDog.observe(viewLifecycleOwner){
       when(it)
       {
@@ -42,12 +43,6 @@ class GenerateDogsFragment : BaseFragment<FragmentGenerateDogsBinding, DogsViewM
         is ResourceV2.Error -> binding.isLoading = false
       }
     }
-  }
-
-  private fun setupAnim() {
-    binding.animationView.setAnimation(R.raw.loading_json)
-    binding.animationView.repeatCount = LottieDrawable.INFINITE
-    binding.animationView.playAnimation()
   }
 
 //  override fun getViewModel() = DogsViewModel::class.java

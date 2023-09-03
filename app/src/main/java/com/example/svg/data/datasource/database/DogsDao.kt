@@ -24,5 +24,5 @@ interface DogsDao {
   fun getLRUDog(): Flow<Int>
 
   @Query("SELECT COUNT(id) FROM dogs")
-  fun getNoOfDogs(): Int
+  fun getNoOfDogs(): Flow<Int>
 }

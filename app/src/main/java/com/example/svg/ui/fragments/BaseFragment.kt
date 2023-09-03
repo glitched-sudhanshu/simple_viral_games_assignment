@@ -12,6 +12,9 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.AnimBuilder
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieDrawable
+import com.example.svg.R
 import com.example.svg.util.defaultNavAnimationsBuilder
 import java.lang.IllegalStateException
 
@@ -55,6 +58,12 @@ abstract class BaseFragment<VB : ViewDataBinding, VM : ViewModel> : Fragment() {
       popUpTo(destinationId) { inclusive = true }
       anim(animBuilder ?: defaultNavAnimationsBuilder)
     })
+  }
+
+  fun Fragment.setupLoadingAnim(view : LottieAnimationView) {
+    view.setAnimation(R.raw.loading_json)
+    view.repeatCount = LottieDrawable.INFINITE
+    view.playAnimation()
   }
 
   abstract fun getFragmentView(): Int

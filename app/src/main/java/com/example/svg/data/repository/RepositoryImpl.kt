@@ -10,9 +10,11 @@ import com.example.svg.domain.models.toDogs
 import com.example.svg.util.ResourceV2
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.io.IOException
 
@@ -31,12 +33,11 @@ class RepositoryImpl(private val dao: DogsDao) : Repository {
             emit(ResourceV2.Success(body.toDogs()))
             // Use Dispatchers.IO for database operations
             withContext(Dispatchers.IO) {
-              val noOfDogs = dao.getNoOfDogs()
-              if (noOfDogs >= 20) {
+              val noOfDogs = dao.getNoOfDogs().first()
+              if (noOfDogs >= 5) {
                 try {
-                  dao.getLRUDog().collect { lruDogId ->
-                    dao.removeLRUDog(lruDogId)
-                  }
+                  val lruDog = dao.getLRUDog().first()
+                    dao.removeLRUDog(lruDog)
                 } catch (exception: Exception) {
                   emit(ResourceV2.Error("Unable to delete LRU dog!"))
                 }
@@ -57,9 +58,9 @@ class RepositoryImpl(private val dao: DogsDao) : Repository {
     return flow<ResourceV2<List<Dogs>>> {
       try {
         emit(ResourceV2.Loading())
-        dao.getAllDogs().transform {
-          emit(ResourceV2.Success(it.toDogs()))
-        }
+        emitAll(dao.getAllDogs().map {
+          ResourceV2.Success(it.toDogs())
+        })
       } catch (exception: Exception) {
         emit(ResourceV2.Error(exception.message))
       }

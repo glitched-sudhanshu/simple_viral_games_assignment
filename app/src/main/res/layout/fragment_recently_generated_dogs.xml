@@ -5,6 +5,13 @@
 
   <data>
 
+    <variable
+        name="isLoading"
+        type="boolean" />
+
+    <variable
+        name="isEmpty"
+        type="boolean" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,13 +22,26 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCachedDogs"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="300dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/ivGeneratedDog"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:scaleType="centerCrop"
+        visibleIf="@{isEmpty}"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline2"
+        android:src="@drawable/empty_dog"
+        tools:srcCompat="@drawable/empty_dog" />
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -31,7 +51,7 @@
         app:layout_constraintGuide_percent="0.25" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button"
+        android:id="@+id/btnClear"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:background="@drawable/button_bg"
@@ -44,6 +64,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rvCachedDogs" />
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_loop="true"
+        visibleIf="@{isLoading}"
+        app:lottie_rawRes="@raw/loading_json" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
