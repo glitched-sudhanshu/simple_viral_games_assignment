@@ -1,6 +1,7 @@
 package com.example.svg.data.datasource.models
 
 import com.example.svg.domain.models.Dogs
+import com.example.svg.domain.models.DogsEntity
 import com.google.gson.annotations.SerializedName
 
 data class ServerDogs(
@@ -11,5 +12,9 @@ data class ServerDogs(
 )
 
 fun ServerDogs.toDogs() = Dogs(
+  imageUrl = imageUrl
+)
+
+fun ServerDogs.toDogsEntity() = DogsEntity(
   imageUrl = imageUrl
 )

@@ -22,4 +22,7 @@ interface DogsDao {
 
   @Query("SELECT id FROM dogs ORDER BY id ASC LIMIT 1")
   fun getLRUDog(): Flow<Int>
+
+  @Query("SELECT COUNT(id) FROM dogs")
+  fun getNoOfDogs(): Int
 }

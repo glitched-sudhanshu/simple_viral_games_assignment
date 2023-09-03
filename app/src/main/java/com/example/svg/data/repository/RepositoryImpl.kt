@@ -2,69 +2,67 @@ package com.example.svg.data.repository
 
 import com.example.svg.data.datasource.database.DogsDao
 import com.example.svg.data.datasource.models.toDogs
+import com.example.svg.data.datasource.models.toDogsEntity
 import com.example.svg.domain.repository.Repository
 import com.example.svg.domain.models.Dogs
 import com.example.svg.data.datasource.network.RetrofitApiInstance
-import com.example.svg.domain.models.DogsEntity
 import com.example.svg.domain.models.toDogs
-import com.example.svg.domain.models.toDogsEntity
 import com.example.svg.util.ResourceV2
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.withContext
+import java.io.IOException
 
-class RepositoryImpl(val dao: DogsDao) : Repository {
+class RepositoryImpl(private val dao: DogsDao) : Repository {
 
   override suspend fun getRandomDogs(): Flow<ResourceV2<Dogs>> {
-    return flow{
+    return flow {
       try {
         emit(ResourceV2.Loading())
         val response = RetrofitApiInstance.api.getRandomDogs()
-        if(response.isSuccessful)
-        {
+        if (response.isSuccessful) {
           val body = response.body()
-          if(body == null) emit(ResourceV2.Error("Dogs not available at the moment"))
-          else emit(ResourceV2.Success(body.toDogs()))
+          if (body == null) {
+            emit(ResourceV2.Error("Dogs not available at the moment!"))
+          } else {
+            emit(ResourceV2.Success(body.toDogs()))
+            // Use Dispatchers.IO for database operations
+            withContext(Dispatchers.IO) {
+              val noOfDogs = dao.getNoOfDogs()
+              if (noOfDogs >= 20) {
+                try {
+                  dao.getLRUDog().collect { lruDogId ->
+                    dao.removeLRUDog(lruDogId)
+                  }
+                } catch (exception: Exception) {
+                  emit(ResourceV2.Error("Unable to delete LRU dog!"))
+                }
+              }
+              dao.cacheDog(body.toDogsEntity())
+            }
+          }
         }
-      } catch (exception : Exception)
-      {
-        emit(ResourceV2.Error(exception.message))
+      } catch (exception: IOException) {
+        emit(ResourceV2.Error("Network error while fetching dog from server!"))
+      } catch (exception: Exception) {
+        emit(ResourceV2.Error("An error occurred while fetching dog from server: ${exception.message}"))
       }
-    }
+    }.flowOn(Dispatchers.IO) // Ensure the Flow runs on an IO thread
   }
 
   override suspend fun getCachedDogs(): Flow<ResourceV2<List<Dogs>>> {
-    return flow{
-      try{
+    return flow<ResourceV2<List<Dogs>>> {
+      try {
         emit(ResourceV2.Loading())
-        dao.getAllDogs().transform{
-          emit(it.toDogs())
+        dao.getAllDogs().transform {
+          emit(ResourceV2.Success(it.toDogs()))
         }
-      } catch (exception : Exception){
+      } catch (exception: Exception) {
         emit(ResourceV2.Error(exception.message))
       }
-    }
-  }
-
-  override suspend fun cacheDog(dogs: Dogs) {
-    val dogsEntity = dogs.toDogsEntity()
-    dao.cacheDog(dogsEntity = dogsEntity)
-  }
-
-  override suspend fun removeLRUDog(dogsId: Int) {
-    dao.removeLRUDog(dogsId)
-  }
-
-  override suspend fun getLRUDog(): Flow<ResourceV2<Int>> {
-    return flow{
-      try{
-        emit(ResourceV2.Loading())
-        dao.getLRUDog().transform{
-          emit(it)
-        }
-      } catch (exception : Exception){
-        emit(ResourceV2.Error(exception.message))
-      }
-    }
+    }.flowOn(Dispatchers.IO)
   }
 }
