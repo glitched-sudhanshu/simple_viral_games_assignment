@@ -7,6 +7,7 @@ import com.example.svg.domain.models.Dogs
 import com.example.svg.data.datasource.network.RetrofitApiInstance
 import com.example.svg.domain.models.DogsEntity
 import com.example.svg.domain.models.toDogs
+import com.example.svg.domain.models.toDogsEntity
 import com.example.svg.util.ResourceV2
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -45,11 +46,25 @@ class RepositoryImpl(val dao: DogsDao) : Repository {
     }
   }
 
-  override suspend fun cacheDog(dogsEntity: DogsEntity) {
+  override suspend fun cacheDog(dogs: Dogs) {
+    val dogsEntity = dogs.toDogsEntity()
     dao.cacheDog(dogsEntity = dogsEntity)
   }
 
-  override suspend fun removeDog(dogsEntity: DogsEntity) {
-    dao.removeDog(dogsEntity = dogsEntity)
+  override suspend fun removeLRUDog(dogsId: Int) {
+    dao.removeLRUDog(dogsId)
+  }
+
+  override suspend fun getLRUDog(): Flow<ResourceV2<Int>> {
+    return flow{
+      try{
+        emit(ResourceV2.Loading())
+        dao.getLRUDog().transform{
+          emit(it)
+        }
+      } catch (exception : Exception){
+        emit(ResourceV2.Error(exception.message))
+      }
+    }
   }
 }

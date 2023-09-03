@@ -59,6 +59,8 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
 
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.0"
+
     def room_version = "2.4.3"
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
