@@ -31,11 +31,11 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
-        android:id="@+id/ivGeneratedDog"
+        android:id="@+id/rvEmpty"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:scaleType="centerCrop"
-        visibleIf="@{isEmpty}"
+        invisibleIf="@{!isEmpty}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline2"
@@ -54,16 +54,17 @@
         android:id="@+id/btnClear"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
+        android:layout_marginBottom="80dp"
         android:background="@drawable/button_bg"
-        android:paddingHorizontal="28dp"
         android:foreground="?attr/selectableItemBackground"
+        android:paddingHorizontal="28dp"
         android:text="@string/clear_dogs"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="55dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvCachedDogs" />
+        app:layout_constraintTop_toBottomOf="@+id/rvEmpty" />
 
 
     <com.airbnb.lottie.LottieAnimationView

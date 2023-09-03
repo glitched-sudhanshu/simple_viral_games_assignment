@@ -45,4 +45,10 @@ class DogsViewModel(private val repository: Repository) : ViewModel() {
     }
   }
 
+  fun deleteAllDogs() {
+    viewModelScope.launch {
+      repository.deleteAllDogs()
+    }
+  }
+
 }

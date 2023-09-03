@@ -9,4 +9,6 @@ interface Repository {
   suspend fun getRandomDogs(): Flow<ResourceV2<Dogs>>
 
   suspend fun getCachedDogs(): Flow<ResourceV2<List<Dogs>>>
+
+  suspend fun deleteAllDogs()
 }

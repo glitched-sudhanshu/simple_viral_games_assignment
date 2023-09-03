@@ -37,7 +37,7 @@ class RepositoryImpl(private val dao: DogsDao) : Repository {
               if (noOfDogs >= 5) {
                 try {
                   val lruDog = dao.getLRUDog().first()
-                    dao.removeLRUDog(lruDog)
+                  dao.removeLRUDog(lruDog)
                 } catch (exception: Exception) {
                   emit(ResourceV2.Error("Unable to delete LRU dog!"))
                 }
@@ -66,4 +66,9 @@ class RepositoryImpl(private val dao: DogsDao) : Repository {
       }
     }.flowOn(Dispatchers.IO)
   }
+
+  override suspend fun deleteAllDogs() {
+    dao.deleteAllDogs()
+  }
+
 }

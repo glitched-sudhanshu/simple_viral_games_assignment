@@ -1,7 +1,6 @@
 package com.example.svg.data.datasource.database
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -25,4 +24,7 @@ interface DogsDao {
 
   @Query("SELECT COUNT(id) FROM dogs")
   fun getNoOfDogs(): Flow<Int>
+
+  @Query("DELETE FROM dogs")
+  suspend fun deleteAllDogs()
 }

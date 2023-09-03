@@ -27,6 +27,9 @@ class RecentlyGeneratedDogsFragment :
     viewModel.getCachedDogs()
     setupLoadingAnim(binding.animationView)
 
+    binding.btnClear.setOnClickListener{
+      viewModel.deleteAllDogs()
+    }
 
     binding.rvCachedDogs.layoutManager =
       LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -46,7 +49,6 @@ class RecentlyGeneratedDogsFragment :
         is ResourceV2.Error -> binding.isLoading = false
       }
     }
-
   }
 //  override fun getViewModel() = DogsViewModel::class.java
 }
