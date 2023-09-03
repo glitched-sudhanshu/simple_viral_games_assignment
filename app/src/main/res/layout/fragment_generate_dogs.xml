@@ -36,6 +36,7 @@
         android:layout_height="35dp"
         android:background="@drawable/button_bg"
         android:paddingHorizontal="28dp"
+        android:foreground="?attr/selectableItemBackground"
         android:text="@string/generate"
         android:textAllCaps="false"
         android:textColor="@color/white"
