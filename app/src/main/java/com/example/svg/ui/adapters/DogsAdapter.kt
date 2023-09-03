@@ -25,6 +25,8 @@ class DogsAdapter(private val context: Context) :
       .load(dogs[position].imageUrl)
       .placeholder(R.drawable.empty_dog)
       .into(holder.ivDog)
+
+    holder.tvNumber.text = "${position+1}/${dogs.size}"
   }
 
   override fun getItemCount() = dogs.size
@@ -32,6 +34,7 @@ class DogsAdapter(private val context: Context) :
   class ViewHolder(view: SavedDogItemBinding) : RecyclerView.ViewHolder(view.root) {
 
     val ivDog = view.ivDog
+    val tvNumber = view.tvNumber
   }
 
   fun dogsList(list : List<Dogs>){
