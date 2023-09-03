@@ -1,6 +1,5 @@
 package com.example.svg.ui.fragments
 
-import androidx.fragment.app.Fragment
 import com.example.svg.R
 import com.example.svg.databinding.FragmentRecentlyGeneratedDogsBinding
 import com.example.svg.viewmodels.DogsViewModel

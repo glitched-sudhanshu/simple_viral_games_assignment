@@ -2,6 +2,7 @@ package com.example.svg.ui.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
 import com.example.svg.application.MyApplication
 import com.example.svg.databinding.ActivityMainBinding
@@ -22,6 +23,8 @@ class MainActivity : AppCompatActivity() {
 
     binding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(binding.root)
+
+    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
   }
 }
