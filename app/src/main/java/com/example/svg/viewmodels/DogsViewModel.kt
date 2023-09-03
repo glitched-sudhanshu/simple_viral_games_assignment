@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.svg.domain.models.Dogs
 import com.example.svg.domain.repository.Repository
 import com.example.svg.util.ResourceV2
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class DogsViewModel(private val repository: Repository) : ViewModel() {
@@ -34,9 +35,19 @@ class DogsViewModel(private val repository: Repository) : ViewModel() {
     }
   }
 
-  private fun getRandomDog() {
+  fun getRandomDog() {
     viewModelScope.launch {
-      
+      val response = repository.getRandomDogs()
+      response.catch {
+        _latestRandomDog.postValue(ResourceV2.Error("${it.message}"))
+      }.collect{
+        when(it)
+        {
+          is ResourceV2.Loading -> _latestRandomDog.postValue(ResourceV2.Loading())
+          is ResourceV2.Success -> _latestRandomDog.postValue(ResourceV2.Success(it.data))
+          is ResourceV2.Error -> _latestRandomDog.postValue(ResourceV2.Error(it.message))
+        }
+      }
     }
   }
 

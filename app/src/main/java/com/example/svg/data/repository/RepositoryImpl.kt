@@ -48,7 +48,7 @@ class RepositoryImpl(private val dao: DogsDao) : Repository {
       } catch (exception: IOException) {
         emit(ResourceV2.Error("Network error while fetching dog from server!"))
       } catch (exception: Exception) {
-        emit(ResourceV2.Error("An error occurred while fetching dog from server: ${exception.message}"))
+        emit(ResourceV2.Error("An error occurred while fetching dog from server"))
       }
     }.flowOn(Dispatchers.IO) // Ensure the Flow runs on an IO thread
   }
