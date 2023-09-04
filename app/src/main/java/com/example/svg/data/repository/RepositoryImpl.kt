@@ -34,7 +34,7 @@ class RepositoryImpl(private val dao: DogsDao) : Repository {
             // Use Dispatchers.IO for database operations
             withContext(Dispatchers.IO) {
               val noOfDogs = dao.getNoOfDogs().first()
-              if (noOfDogs >= 5) {
+              if (noOfDogs >= 7) {
                 try {
                   val lruDog = dao.getLRUDog().first()
                   dao.removeLRUDog(lruDog)
